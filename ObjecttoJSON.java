@@ -1,0 +1,77 @@
+package sebastian.allianz.de.AllianzNavigation;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ObjecttoJSON {
+		public ObjecttoJSON() {
+			
+		}
+		
+		public static JSONArray writePositions(List<Position> input) {
+				JSONArray ret = new JSONArray();
+				JSONObject pos;
+				JSONObject map;
+				for(int i = 0; i < input.length(); i++) {
+					 pos = new JSONObject();
+					 pos.put("x", input.get(i).x);
+					 pos.put("y", input.get(i).y);
+					 map = new JSONObject();
+					 map.put("map_id", input.get(i).map_id);
+					 pos.put("map", map);
+					 ret.put(pos);
+				}
+				return ret;
+		}
+		
+		public static JSONArray writeWifis(List<CoordWFP> l_cWFP) {
+				JSONArray ret = new JSONArray();
+				JSONObject wifi;
+				JSONObject position;
+				for(int i= 0; i< l_cWFP.length(); i++) {
+						wifi = new JSONObject();
+						position = new JSONObject();
+						position.put("pos_id", l_cWFP.get(i).position.pos_id);
+						for(SSIDLevelPair s: l_cWFP.get(i).wfp.Scans) {
+							  wifi.put("lvl", s.level);
+							  wifi.put("mac_adress", s.SSID);
+							  wifi.put("position", position);
+							  ret.put(wifi);
+						}
+				}
+				return ret;
+		}
+		
+		public static JSONArray writePois(List<POI> l_POI) {
+				JSONArray ret = new JSONArray();
+				JSONObject poi;
+				JSONObject map;
+				String img_src;
+				for(POI p: l_POI) {
+					poi.put("x", p.x);
+					poi.put("y", p.y);
+					img_src = classIdToImgSrc(p.class_id);
+					poi.put("img_src", img_src);
+					map.put("map_id", 1);
+					poi.put("map", map);
+					ret.put(poi);
+				}
+				return ret;
+		}
+		
+		private String classIdToImgSrc(int classid) {
+		String imgSrc;
+			switch(classid) {
+				case 1: imgSrc = "koffer"; break;
+				case 2: imgSrc = "ersthelfer"; break;
+				case 3: imgSrc = "sammelpl"; break;
+				case 4: imgSrc = "defi"; break;
+				case 5: imgSrc = "feuerloescher"; break;
+				case 6: imgSrc = "room"; break;
+				default: imgSrc = "NULLNULLLALALALLA" break;
+			}
+			return imgSrc;
+}
